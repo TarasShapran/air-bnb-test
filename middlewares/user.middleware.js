@@ -1,4 +1,4 @@
-const User = require('../dataBase/User');
+const {User} = require('../dataBase');
 const {userValidator} = require('../validators');
 const ErrorHandler = require('../errors/ErrorHandler');
 const {constants} = require('../configs');
