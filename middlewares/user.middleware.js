@@ -4,7 +4,7 @@ const ErrorHandler = require('../errors/ErrorHandler');
 const {constants} = require('../configs');
 
 module.exports = {
-    createUserMiddleware: async (req, res, next) => {
+    isUserEmailExistMiddleware: async (req, res, next) => {
         try {
             const {email} = req.body;
 

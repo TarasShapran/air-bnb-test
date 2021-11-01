@@ -5,12 +5,11 @@ module.exports = {
         try {
             const {avatar} = req.files;
 
-            if (!avatar || !req.files) {
-                next();
-                return;
-            }
-
             const {name, size, mimetype} = avatar;
+
+            if (!avatar ) {
+                throw new ErrorHandler('File not found',constants.NOT_FOUND);
+            }
 
             if (!constants.PHOTOS_MIMETYPES.includes(mimetype)) {
                 throw new ErrorHandler('Not supported format', constants.BAD_REQUEST);

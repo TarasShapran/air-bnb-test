@@ -10,7 +10,7 @@ require('dotenv')
 
 const {config, constants} = require('./configs');
 const startCron = require('./cron');
-const {authRouter, userRouter, carRouter} = require('./routes');
+const {authRouter, userRouter} = require('./routes');
 const ErrorHandler = require('./errors/ErrorHandler');
 const {checkDefaultDate} = require('./util');
 const swaggerJson = require('./docs/swagger.json');
@@ -39,7 +39,6 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 app.use('/auth', authRouter);
-app.use('/cars', carRouter);
 app.use('/users', userRouter);
 
 // eslint-disable-next-line no-unused-vars

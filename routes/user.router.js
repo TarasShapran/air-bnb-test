@@ -12,9 +12,14 @@ router.get(
 router.post(
     '/',
     userMiddleware.isUserBodyValid,
-    fileMiddleware.checkUserAvatar,
-    userMiddleware.createUserMiddleware,
+    userMiddleware.isUserEmailExistMiddleware,
     userController.createUser);
+
+router.put(
+    '/',
+    fileMiddleware.checkUserAvatar,
+    userController.addAvatar
+);
 
 router.delete(
     '/:user_id',

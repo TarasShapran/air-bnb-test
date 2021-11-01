@@ -34,15 +34,7 @@ module.exports = {
         try {
             const {name} = req.body;
 
-            let newUser = await User.createUserWithHashPassword(req.body);
-
-            const {avatar} = req.files;
-
-            if (avatar && req.files) {
-                const uploadInfo = await s3Service.uploadImage(avatar, 'user', newUser._id.toString());
-
-                newUser = await User.findByIdAndUpdate(newUser._id, {avatar: uploadInfo.Location}, {new: true});
-            }
+            const newUser = await User.createUserWithHashPassword(req.body);
 
             const token = jwtService.generateActionToken(actionTokenTypeEnum.ACTIVATE);
 
@@ -98,4 +90,25 @@ module.exports = {
             next(err);
         }
     },
+
+    addAvatar: async (req, res, next) => {
+        try {
+            const {avatar} = req.files;
+            const {_id} = req.body;
+            let user ={};
+
+            if (avatar && req.files) {
+                const uploadInfo = await s3Service.uploadImage(avatar, 'user', _id);
+
+                user = await User.findByIdAndUpdate(_id, {avatar: uploadInfo.Location}, {new: true});
+            }
+
+            const normalizedUser = userUtil.userNormalizator(user.toObject());
+
+            res.json(normalizedUser)
+                .status(constants.CREATED);
+        } catch (err) {
+            next(err);
+        }
+    }
 };
