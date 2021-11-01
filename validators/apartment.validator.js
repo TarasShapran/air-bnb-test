@@ -19,14 +19,12 @@ const createApartmentValidator = Joi.object({
         .trim(),
     description: Joi
         .string()
-        .alphanum()
         .min(20)
         .max(1500)
         .required()
         .trim(),
     region: Joi
         .string()
-        .alphanum()
         .min(2)
         .max(30)
         .required()
