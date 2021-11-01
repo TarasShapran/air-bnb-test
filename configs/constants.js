@@ -17,7 +17,7 @@ module.exports = {
     ACCESS_DENIED: 'Access denied',
     AUTHORIZATION: 'Authorization',
     CAN_NOT_CHANGE_FIELDS: 'You can not change email , password or role',
-    CAR_ID_DOES_NOT_EXIST: 'Car_id does not exist',
+    APARTMENT_ID_DOES_NOT_EXIST: 'Apartment_id does not exist',
     EMAIL_ALREADY_EXISTS: 'Email already exist',
     INVALID_TOKEN: 'Invalid token',
     USER_ID_DOES_NOT_EXIST: 'User_id does not exist',

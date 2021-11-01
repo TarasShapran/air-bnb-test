@@ -1,4 +1,5 @@
 module.exports = {
+    apartmentService: require('./apartment.service'),
     emailService: require('./email.service'),
     jwtService: require('./jwt.service'),
     passwordService: require('./password.service'),

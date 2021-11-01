@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose');
 
 const {modelNamesEnum, apartmentTypeEnum} = require('../configs');
 
-const apartment = new Schema({
+const apartmentSchema = new Schema({
     country: {
         type: String,
         required: true,
@@ -18,7 +18,7 @@ const apartment = new Schema({
         required: true,
         trim: true
     },
-    type_of_apartment: {
+    type: {
         type: String,
         enum: Object.values(apartmentTypeEnum)
     },
@@ -51,4 +51,4 @@ const apartment = new Schema({
     }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
-module.exports = model(modelNamesEnum.APARTMENT, apartment);
+module.exports = model(modelNamesEnum.APARTMENT, apartmentSchema);
