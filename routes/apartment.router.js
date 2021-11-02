@@ -14,11 +14,23 @@ router.post(
 router.get(
     '/:apartment_id',
     apartmentMiddleware.checkApartmentIdMiddleware,
-    apartmentController.getApartmentById
-);
+    apartmentController.getApartmentById);
+
 router.get(
     '/',
-    apartmentController.getApartment
-);
+    apartmentController.getApartment);
+
+router.delete(
+    '/:apartment_id',
+    apartmentMiddleware.checkApartmentIdMiddleware,
+    authMiddleware.checkAccessToken,
+    apartmentController.deleteApartment);
+
+router.put(
+    '/:apartment_id',
+    authMiddleware.checkAccessToken,
+    apartmentMiddleware.checkApartmentIdMiddleware,
+    apartmentMiddleware.isApartmentBodyValid,
+    apartmentController.updateApartment);
 
 module.exports = router;

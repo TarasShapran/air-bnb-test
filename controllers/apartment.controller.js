@@ -1,6 +1,7 @@
-const {Apartment} = require('../dataBase');
-const {constants} = require('../configs');
-const {apartmentService} = require('../service');
+const {Apartment, User} = require('../dataBase');
+const {constants, emailActionsEnum} = require('../configs');
+const {apartmentService, emailService} = require('../service');
+const userUtil = require('../util/user.util');
 
 module.exports = {
     createApartment: async (req, res, next) => {
@@ -15,7 +16,7 @@ module.exports = {
             next(e);
         }
     },
-    getApartmentById:  (req, res, next) => {
+    getApartmentById: (req, res, next) => {
         try {
             const {apartment} = req;
 
@@ -24,13 +25,39 @@ module.exports = {
             next(e);
         }
     },
-    getApartment:async (req, res, next) => {
+    getApartment: async (req, res, next) => {
         try {
-            const apartment =await apartmentService.getAllApartment(req.query);
+            const apartment = await apartmentService.getAllApartment(req.query);
 
             res.json(apartment);
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    deleteApartment: async (req, res, next) => {
+        try {
+            const {apartment_id} = req.params;
+
+            await Apartment.deleteOne({_id: apartment_id});
+
+            res.sendStatus(constants.NO_CONTENT);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    updateApartment: async (req, res, next) => {
+        try {
+            const {apartment_id} = req.params;
+
+            const newApartment = await Apartment.findByIdAndUpdate(apartment_id, req.body, {new: true})
+                .lean();
+
+            res.json(newApartment)
+                .status(constants.CREATED);
+        } catch (err) {
+            next(err);
+        }
+    },
 };

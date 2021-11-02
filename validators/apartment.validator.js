@@ -29,7 +29,7 @@ const createApartmentValidator = Joi.object({
         .max(30)
         .required()
         .trim(),
-    type_of_apartment: Joi
+    type: Joi
         .string()
         .allow(...Object.values(apartmentTypeEnum)),
     number_of_rooms: Joi
