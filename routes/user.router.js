@@ -7,6 +7,7 @@ const {userRoles: {ADMIN}} = require('../configs');
 
 router.get(
     '/',
+    userMiddleware.checkUserRole([ADMIN]),
     userController.getUsers);
 
 router.post(
@@ -17,19 +18,21 @@ router.post(
 
 router.put(
     '/',
+    authMiddleware.checkAccessToken,
     fileMiddleware.checkUserAvatar,
     userController.addAvatar
 );
 
 router.delete(
     '/:user_id',
+    userMiddleware.checkUserRole([ADMIN]),
     userMiddleware.checkUserIdMiddleware,
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserRole([ADMIN]),
     userController.deleteUser);
 
 router.get(
     '/:user_id',
+    authMiddleware.checkAccessToken,
     userMiddleware.checkUserIdMiddleware,
     userController.getUserById);
 
