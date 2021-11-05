@@ -7,6 +7,7 @@ dayJs.extend(isBetween);
 const {Booking} = require('../dataBase');
 const ErrorHandler = require('../errors/ErrorHandler');
 const {constants} = require('../configs');
+const {bookingValidator} = require('../validators');
 
 module.exports = {
     isBookingDateFree: async (req, res, next) => {
@@ -40,13 +41,32 @@ module.exports = {
                         .isBetween(check_in, check_out, null, '[]');
 
                     if (isBetweenCheckIn || isBetweenCheckOut || isBetweenDateSt || isBetweenDateEn) {
-                        throw new ErrorHandler('Date is reserved',constants.BAD_REQUEST);
+                        throw new ErrorHandler('Date is reserved', constants.BAD_REQUEST);
                     }
                 });
             }
+
+            req.apartment = reservedApartment;
+
             next();
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    isBookingBodyValid: (req, res, next) => {
+        try {
+            const {error, value} = bookingValidator.isBookingBodyValid.validate(req.body);
+
+            if (error) {
+                throw new ErrorHandler(error.details[0].message, constants.BAD_REQUEST);
+            }
+
+            req.body = value;
+
+            next();
+        } catch (err) {
+            next(err);
+        }
+    },
 };

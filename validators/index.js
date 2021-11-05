@@ -1,4 +1,5 @@
 module.exports = {
-    userValidator: require('./user.validator'),
     apartmentValidator: require('./apartment.validator'),
+    bookingValidator: require('./booking.validator'),
+    userValidator: require('./user.validator'),
 };
