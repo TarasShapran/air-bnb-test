@@ -42,7 +42,6 @@ module.exports = {
                     if (isBetweenCheckIn || isBetweenCheckOut || isBetweenDateSt || isBetweenDateEn) {
                         throw new ErrorHandler('Date is reserved',constants.BAD_REQUEST);
                     }
-
                 });
             }
             next();
