@@ -6,6 +6,7 @@ dayJs.extend(isBetween);
 
 const {Booking} = require('../dataBase');
 const ErrorHandler = require('../errors/ErrorHandler');
+const {constants} = require('../configs');
 
 module.exports = {
     isBookingDateFree: async (req, res, next) => {
@@ -14,32 +15,32 @@ module.exports = {
 
             const {check_in, check_out} = req.body;
 
-            const qqq = await Booking.findOne({apartment_id});
+            const reservedApartment = await Booking.findOne({apartment_id});
 
-            if (qqq) {
-                const {booking} = qqq;
+            if (reservedApartment) {
+                const {booking} = reservedApartment;
 
                 booking.forEach(value => {
-                    const dateSt = dayJs.unix(value.booking_start / 1000)
+                    const startReservedDate = dayJs.unix(value.booking_start / 1000)
                         .format('DD MMM YYYY');
 
-                    const dateEn = dayJs.unix(value.booking_end / 1000)
+                    const endReservedDate = dayJs.unix(value.booking_end / 1000)
                         .format('DD MMM YYYY');
 
                     const isBetweenCheckIn = dayJs(check_in)
-                        .isBetween(dateSt, dateEn, null, '[]');
+                        .isBetween(startReservedDate, endReservedDate, null, '[]');
 
                     const isBetweenCheckOut = dayJs(check_out)
-                        .isBetween(dateSt, dateEn, null, '[]');
+                        .isBetween(startReservedDate, endReservedDate, null, '[]');
 
-                    const isBetweenDateSt = dayJs(dateSt)
+                    const isBetweenDateSt = dayJs(startReservedDate)
                         .isBetween(check_in, check_out, null, '[]');
 
-                    const isBetweenDateEn = dayJs(dateEn)
+                    const isBetweenDateEn = dayJs(endReservedDate)
                         .isBetween(check_in, check_out, null, '[]');
 
                     if (isBetweenCheckIn || isBetweenCheckOut || isBetweenDateSt || isBetweenDateEn) {
-                        throw new ErrorHandler('Date is reserved',404);
+                        throw new ErrorHandler('Date is reserved',constants.BAD_REQUEST);
                     }
 
                 });
