@@ -1,5 +1,6 @@
 const {constants} = require('../configs');
 const ErrorHandler = require('../errors/ErrorHandler');
+
 module.exports = {
     checkUserAvatar: (req, res, next) => {
         try {

@@ -1,7 +1,6 @@
-const {Apartment, User} = require('../dataBase');
-const {constants, emailActionsEnum} = require('../configs');
-const {apartmentService, emailService} = require('../service');
-const userUtil = require('../util/user.util');
+const {Apartment} = require('../dataBase');
+const {constants} = require('../configs');
+const {apartmentService} = require('../service');
 
 module.exports = {
     createApartment: async (req, res, next) => {
