@@ -6,5 +6,7 @@ module.exports = {
     UPDATE: 'update',
     FORGOT_PASSWORD: 'forgotPassword',
     CHANGE_PASSWORD: 'changePassword',
-    COME_BACK: 'comeBack'
+    COME_BACK: 'comeBack',
+    APARTMENT_RESERVED: 'apartmentReserved',
+    RESERVED: 'Reserved'
 };

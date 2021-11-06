@@ -1,14 +1,19 @@
 const dayJs = require('dayjs');
 
-const {constants} = require('../configs');
-const {Booking, Apartment} = require('../dataBase');
+const {constants, emailActionsEnum} = require('../configs');
+const {Booking, Apartment, User} = require('../dataBase');
+const {emailService} = require('../service');
 
 module.exports = {
     createBooking: async (req, res, next) => {
         try {
             const {user_id, apartment_id} = req.params;
+
             const {check_in, check_out} = req.body;
-            const apartment = req.apartment;
+
+            const {user_id: userId, price: apartmentPrice} = req.apartment;
+
+            const {email: userEmail} = req.user;
 
             const booking_start = dayJs(check_in)
                 .valueOf();
@@ -20,9 +25,15 @@ module.exports = {
 
             const numberOfDays = booking_end1.diff(booking_start1, 'day');
 
-            const price = numberOfDays * apartment.price;
+            const price = numberOfDays * apartmentPrice;
 
             const reservedApartment = await Booking.create({user_id, apartment_id, booking_start, booking_end, price});
+
+            const {email: apartmentEmail, name: userName} = await User.findOne({_id: userId});
+
+            await emailService.sendMail(userEmail, emailActionsEnum.RESERVED);
+
+            await emailService.sendMail(apartmentEmail, emailActionsEnum.APARTMENT_RESERVED, {userName,check_in,check_out});
 
             res.json(reservedApartment)
                 .status(constants.CREATED);
@@ -43,7 +54,6 @@ module.exports = {
 
             const apartment = await Apartment.findOne({apartment_id});
 
-            console.log(apartment);
 
             const booking_start1 = dayJs(check_in);
             const booking_end1 = dayJs(check_out);

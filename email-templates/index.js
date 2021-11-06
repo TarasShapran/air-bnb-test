@@ -32,5 +32,13 @@ module.exports = {
     [emailActionsEnum.COME_BACK]: {
         templateName: 'come-back.pug',
         subject: 'Come back'
+    },
+    [emailActionsEnum.APARTMENT_RESERVED]: {
+        templateName: 'landlord-booking.pug',
+        subject: 'Rent'
+    },
+    [emailActionsEnum.RESERVED]: {
+        templateName: 'tenant-booking.pug',
+        subject: 'Rent'
     }
 };

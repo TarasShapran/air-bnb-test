@@ -44,6 +44,9 @@ const createApartmentValidator = Joi.object({
     star_rating: Joi
         .number()
         .required(),
+    price:Joi
+        .number()
+        .required()
 
 });
 

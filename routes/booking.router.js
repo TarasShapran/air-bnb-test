@@ -7,9 +7,9 @@ router.post(
     '/:user_id/:apartment_id',
     authMiddleware.checkAccessToken,
     bookingMiddleware.isBookingBodyValid,
-    apartmentMiddleware.checkApartmentIdMiddleware,
     userMiddleware.checkUserIdMiddleware,
-    bookingMiddleware.isBookingDateFree,
+    apartmentMiddleware.checkApartmentIdMiddleware,
+    bookingMiddleware.isBookingDateFree(),
     bookingController.createBooking);
 
 router.put(
