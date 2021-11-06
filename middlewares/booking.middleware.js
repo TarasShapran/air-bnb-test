@@ -8,46 +8,32 @@ const {Booking} = require('../dataBase');
 const ErrorHandler = require('../errors/ErrorHandler');
 const {constants} = require('../configs');
 const {bookingValidator} = require('../validators');
+const {bookingUtil} = require('../util');
 
 module.exports = {
-    isBookingDateFree: async (req, res, next) => {
+    isBookingDateFree: (action = 'create') => async (req, res, next) => {
         try {
-            const {apartment_id} = req.params;
+            let apartment_id = null;
+
+            if (action === 'create') {
+                const {apartment_id: id} = req.params;
+
+                apartment_id = id;
+            }
+
+            if (action === 'update') {
+                const {apartment_id: id} = req.booking;
+
+                apartment_id = id;
+            }
 
             const {check_in, check_out} = req.body;
 
-            const reservedApartment = await Booking.findOne({apartment_id});
+            const reservedApartments = await Booking.find({apartment_id});
 
-            if (reservedApartment) {
-                const {booking} = reservedApartment;
-
-                booking.forEach(value => {
-                    const startReservedDate = dayJs.unix(value.booking_start / 1000)
-                        .format('DD MMM YYYY');
-
-                    const endReservedDate = dayJs.unix(value.booking_end / 1000)
-                        .format('DD MMM YYYY');
-
-                    const isBetweenCheckIn = dayJs(check_in)
-                        .isBetween(startReservedDate, endReservedDate, null, '[]');
-
-                    const isBetweenCheckOut = dayJs(check_out)
-                        .isBetween(startReservedDate, endReservedDate, null, '[]');
-
-                    const isBetweenDateSt = dayJs(startReservedDate)
-                        .isBetween(check_in, check_out, null, '[]');
-
-                    const isBetweenDateEn = dayJs(endReservedDate)
-                        .isBetween(check_in, check_out, null, '[]');
-
-                    if (isBetweenCheckIn || isBetweenCheckOut || isBetweenDateSt || isBetweenDateEn) {
-                        throw new ErrorHandler('Date is reserved', constants.BAD_REQUEST);
-                    }
-                });
+            if (reservedApartments) {
+                bookingUtil.isDateNotReserved(reservedApartments, check_in, check_out);
             }
-
-            req.apartment = reservedApartment;
-
             next();
         } catch (e) {
             next(e);
@@ -63,6 +49,24 @@ module.exports = {
             }
 
             req.body = value;
+
+            next();
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    checkBookingIdMiddleware: async (req, res, next) => {
+        try {
+            const {booking_id} = req.params;
+
+            const bookingId = await Booking.findById(booking_id);
+
+            if (!bookingId) {
+                throw new ErrorHandler(constants.USER_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
+            }
+
+            req.booking = bookingId;
 
             next();
         } catch (err) {

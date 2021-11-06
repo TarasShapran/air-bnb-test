@@ -13,10 +13,17 @@ const bookingSchema = new Schema({
         required: true,
         ref: modelNamesEnum.APARTMENT
     },
-    booking: [{
-        booking_start: String,
-        booking_end: String
-    }]
+    booking_start: {
+        type: String,
+        required: true,
+    },
+    booking_end: {
+        type: String,
+        required: true,
+    },
+    price: {
+        type: Number
+    }
 }, {timestamps: true});
 
 /*bookingSchema.pre('findOne', function() {
