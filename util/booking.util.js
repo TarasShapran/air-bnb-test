@@ -31,5 +31,15 @@ module.exports = {
             }
         });
 
+    },
+
+    calculatePrice:(check_in,check_out,apartmentPrice)=>{
+
+        const booking_start1 = dayJs(check_in);
+        const booking_end1 = dayJs(check_out);
+
+        const numberOfDays = booking_end1.diff(booking_start1, 'day');
+
+        return numberOfDays * apartmentPrice;
     }
 };

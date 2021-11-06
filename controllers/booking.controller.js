@@ -3,6 +3,7 @@ const dayJs = require('dayjs');
 const {constants, emailActionsEnum} = require('../configs');
 const {Booking, Apartment, User} = require('../dataBase');
 const {emailService} = require('../service');
+const {calculatePrice} = require('../util/booking.util');
 
 module.exports = {
     createBooking: async (req, res, next) => {
@@ -20,12 +21,7 @@ module.exports = {
             const booking_end = dayJs(check_out)
                 .valueOf();
 
-            const booking_start1 = dayJs(check_in);
-            const booking_end1 = dayJs(check_out);
-
-            const numberOfDays = booking_end1.diff(booking_start1, 'day');
-
-            const price = numberOfDays * apartmentPrice;
+            const price = calculatePrice(check_in,check_out,apartmentPrice);
 
             const reservedApartment = await Booking.create({user_id, apartment_id, booking_start, booking_end, price});
 
