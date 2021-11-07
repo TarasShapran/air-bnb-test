@@ -1,7 +1,8 @@
 const {User, O_Auth, ActionToken} = require('../dataBase');
 const {emailService, jwtService, userService, s3Service} = require('../service');
 const userUtil = require('../util/user.util');
-const {emailActionsEnum, actionTokenTypeEnum, config, constants} = require('../configs');
+const {emailActionsEnum, actionTokenTypeEnum, config, constants, userStatusEnum} = require('../configs');
+const ErrorHandler = require('../errors/ErrorHandler');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -109,6 +110,42 @@ module.exports = {
                 .status(constants.CREATED);
         } catch (err) {
             next(err);
+        }
+    },
+
+    blockUser:async (req, res, next)=>{
+        try {
+            const {_id, status} = req.user;
+
+            if (status === userStatusEnum.BLOCKED) {
+                throw new ErrorHandler('You can not block already blocked user', constants.FORBIDDEN);
+            }
+
+            await User.updateOne({_id},{status:userStatusEnum.BLOCKED});
+
+            await O_Auth.deleteMany({user_id:_id});
+
+            res.end();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    unblockUser:async (req, res, next)=>{
+        try {
+            const {_id, status} = req.user;
+
+            if (status === userStatusEnum.ACTIVE) {
+                throw new ErrorHandler('You can not block already active user', constants.FORBIDDEN);
+            }
+
+            await User.updateOne({_id},{status:userStatusEnum.ACTIVE});
+
+            await O_Auth.deleteMany({user_id:_id});
+
+            res.end();
+        } catch (e) {
+            next(e);
         }
     }
 };
