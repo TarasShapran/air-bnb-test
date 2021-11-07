@@ -14,6 +14,7 @@ module.exports = {
     INTERNAL_SERVER_ERROR: 500,
 
     ACCESS_DENIED: 'Access denied',
+    ACCOUNT_IS_BLOCKED: 'Account is blocked',
     AUTHORIZATION: 'Authorization',
     CAN_NOT_CHANGE_FIELDS: 'You can not change email , password or role',
     APARTMENT_ID_DOES_NOT_EXIST: 'Apartment_id does not exist',
