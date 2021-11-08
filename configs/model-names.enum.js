@@ -4,5 +4,6 @@ module.exports = {
     O_AUTH: 'o_auth',
     ACTION_TOKENS: 'action_tokens',
     APARTMENT: 'apartment',
-    BOOKING: 'booking'
+    BOOKING: 'booking',
+    COMMENT: 'comment'
 };

@@ -1,6 +1,7 @@
 module.exports = {
     apartmentController: require('./apartment.controller'),
     authController: require('./auth.controller'),
-    userController: require('./user.controller'),
     bookingController: require('./booking.controller'),
+    commentController: require('./comment.controller'),
+    userController: require('./user.controller'),
 };

@@ -7,7 +7,6 @@ const ErrorHandler = require('../errors/ErrorHandler');
 module.exports = {
     getUsers: async (req, res, next) => {
         try {
-            //const users = await User.find().lean();
             const users = await userService.getAllUsers(req.query)
                 .lean();
 
