@@ -1,7 +1,8 @@
 module.exports = {
     apartmentMiddleware: require('./apartment.middleware'),
-    bookingMiddleware: require('./booking.middleware'),
     authMiddleware: require('./auth.middleware'),
+    bookingMiddleware: require('./booking.middleware'),
+    commentMiddleware: require('./comment.middleware'),
     fileMiddleware: require('./file.middleware'),
     userMiddleware: require('./user.middleware')
 };

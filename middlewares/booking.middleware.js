@@ -73,4 +73,23 @@ module.exports = {
             next(err);
         }
     },
+
+    isUserHaveAccess: async (req, res, next) => {
+        try {
+            const {user_id, apartment_id} = req.params;
+
+            const usersBooking = await Booking.findOne({
+                user_id,
+                apartment_id,
+                booking_end: {$lt: Date.now()}});
+
+            if (!usersBooking){
+                throw new ErrorHandler(constants.ACCESS_DENIED,constants.FORBIDDEN);
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
 };
