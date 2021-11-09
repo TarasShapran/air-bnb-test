@@ -8,5 +8,6 @@ module.exports = {
     CHANGE_PASSWORD: 'changePassword',
     COME_BACK: 'comeBack',
     APARTMENT_RESERVED: 'apartmentReserved',
+    APPROVE_TO_RESERVE: 'approveToReserveApartment',
     RESERVED: 'Reserved'
 };

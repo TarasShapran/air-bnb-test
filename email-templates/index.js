@@ -40,5 +40,9 @@ module.exports = {
     [emailActionsEnum.RESERVED]: {
         templateName: 'tenant-booking.pug',
         subject: 'Rent'
+    },
+    [emailActionsEnum.APPROVE_TO_RESERVE]: {
+        templateName: 'approve-to-reserve',
+        subject: 'Approve'
     }
 };

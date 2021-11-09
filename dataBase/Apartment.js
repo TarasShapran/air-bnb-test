@@ -41,6 +41,10 @@ const apartmentSchema = new Schema({
         type: String,
         required: true
     },
+    approve: {
+        type: Boolean,
+        default: false
+    },
     user_id: {
         type: Schema.Types.ObjectId,
         required: true,

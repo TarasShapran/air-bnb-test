@@ -29,11 +29,34 @@ module.exports = {
 
             const {check_in, check_out} = req.body;
 
-            const reservedApartments = await Booking.find({apartment_id});
+            const reservedApartments = await Booking.find({apartment_id, isActive: true});
 
             if (reservedApartments) {
                 bookingUtil.isDateNotReserved(reservedApartments, check_in, check_out);
             }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    isDateFreeBookingApprove: async (req, res, next) => {
+        try {
+            const {booking_id: _id} = req.params;
+
+            const {check_in, check_out, apartment_id, isActive} = await Booking.findOne({_id});
+
+            if (isActive) {
+                throw new ErrorHandler('You can not activate already active booking', constants.FORBIDDEN);
+            }
+
+            const reservedApartments = await Booking.find({apartment_id, isActive: true});
+
+            if (reservedApartments) {
+                bookingUtil.isDateNotReserved(reservedApartments, check_in, check_out);
+            }
+
             next();
         } catch (e) {
             next(e);
