@@ -1,13 +1,12 @@
 const router = require('express')
     .Router();
 
-const {apartmentMiddleware,userMiddleware, authMiddleware, bookingMiddleware} = require('../middlewares');
+const {apartmentMiddleware, authMiddleware, bookingMiddleware} = require('../middlewares');
 const {apartmentController} = require('../controllers');
 
 router.post(
-    '/:user_id',
+    '/',
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserIdMiddleware,
     apartmentMiddleware.isApartmentBodyValid,
     apartmentController.createApartment);
 

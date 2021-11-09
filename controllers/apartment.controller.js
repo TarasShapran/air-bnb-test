@@ -5,7 +5,7 @@ const {apartmentService} = require('../service');
 module.exports = {
     createApartment: async (req, res, next) => {
         try {
-            const {user_id} = req.params;
+            const {_id:user_id} = req.user;
 
             const apartment = await Apartment.create({...req.body, user_id});
 
