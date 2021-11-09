@@ -21,6 +21,7 @@ module.exports = {
     EMAIL_ALREADY_EXISTS: 'Email already exist',
     INVALID_TOKEN: 'Invalid token',
     USER_ID_DOES_NOT_EXIST: 'User_id does not exist',
+    BOOKING_ID_DOES_NOT_EXIST: 'Booking_id does not exist',
     WRONG_EMAIL_OR_PASSWORD: 'Wrong email or password',
     WRONG_TOKEN_TYPE: 'Wrong token type',
     USER_IS_ACTIVE: 'User is Active',

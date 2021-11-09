@@ -16,7 +16,7 @@ router.post(
     commentMiddleware.isCommentBodyValid,
     userMiddleware.checkUserIdMiddleware,
     apartmentMiddleware.checkApartmentIdMiddleware,
-    bookingMiddleware.isUserHaveAccess,
+    bookingMiddleware.isUserHaveAccessAddComment,
     fileMiddleware.checkCommentPhoto,
     commentController.createComment);
 

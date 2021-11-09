@@ -13,10 +13,10 @@ router.post(
     bookingController.createBooking);
 
 router.put(
-    '/:booking_id',
+    '/:user_id/:booking_id',
     authMiddleware.checkAccessToken,
     bookingMiddleware.isBookingBodyValid,
-    bookingMiddleware.checkBookingIdMiddleware,
+    bookingMiddleware.checkBookingIdAndUserIdMiddleware,
     bookingMiddleware.isBookingDateFree('update'),
     bookingController.updateBooking);
 
@@ -31,9 +31,9 @@ router.get(
     bookingController.getBookingById);
 
 router.delete(
-    '/:booking_id',
+    '/:user_id/:booking_id',
     authMiddleware.checkAccessToken,
-    bookingMiddleware.checkBookingIdMiddleware,
+    bookingMiddleware.checkBookingIdAndUserIdMiddleware,
     bookingController.deleteBooking);
 
 module.exports = router;
