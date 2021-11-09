@@ -41,15 +41,21 @@ const createApartmentValidator = Joi.object({
     amount_of_places: Joi
         .number()
         .required(),
-    star_rating: Joi
-        .number()
-        .required(),
     price:Joi
         .number()
         .required()
 
 });
 
+const isStarPresentValidator = Joi.object({
+    star:Joi
+        .number()
+        .min(1)
+        .max(5)
+        .required()
+});
+
 module.exports = {
-    createApartmentValidator
+    createApartmentValidator,
+    isStarPresentValidator
 };

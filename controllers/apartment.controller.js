@@ -50,8 +50,26 @@ module.exports = {
         try {
             const {apartment_id} = req.params;
 
-            const newApartment = await Apartment.findByIdAndUpdate(apartment_id, req.body, {new: true})
-                .lean();
+            const newApartment = await Apartment.findByIdAndUpdate(apartment_id, req.body, {new: true});
+
+            res.json(newApartment)
+                .status(constants.CREATED);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    addStarToApartment: async (req, res, next) => {
+        try {
+            const {apartment_id: _id} = req.params;
+
+            const {star} = req.body;
+
+            const {star_rating: apartmentStar} = await Apartment.findOne({_id});
+
+            const avgStar = Math.round(((apartmentStar + star) / 2)*100)/100;
+
+            const newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: avgStar}, {new: true});
 
             res.json(newApartment)
                 .status(constants.CREATED);
