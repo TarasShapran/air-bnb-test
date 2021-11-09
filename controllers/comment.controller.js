@@ -41,5 +41,17 @@ module.exports = {
         }catch (e) {
             next(e);
         }
+    },
+
+    deleteComment:async (req, res, next)=>{
+        try {
+            const {comment_id:_id} = req.params;
+
+            await Comment.deleteOne({_id});
+
+            res.sendStatus(constants.NO_CONTENT);
+        }catch (e) {
+            next(e);
+        }
     }
 };

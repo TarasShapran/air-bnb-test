@@ -1,4 +1,7 @@
-const {commentController} = require('../controllers');
+const router = require('express')
+    .Router();
+
+const {commentController, } = require('../controllers');
 const {
     apartmentMiddleware,
     authMiddleware,
@@ -6,8 +9,6 @@ const {
     bookingMiddleware,
     fileMiddleware
 } = require('../middlewares');
-const router = require('express')
-    .Router();
 
 router.post(
     '/:apartment_id',
@@ -20,5 +21,11 @@ router.post(
 
 router.get('/',
     commentController.getAllComments);
+
+router.delete(
+    '/:comment_id',
+    authMiddleware.checkAccessToken,
+    commentMiddleware.isUserHaveAccessDeleteComment,
+    commentController.deleteComment);
 
 module.exports = router;
