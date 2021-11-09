@@ -8,13 +8,13 @@ const {calculatePrice} = require('../util/booking.util');
 module.exports = {
     createBooking: async (req, res, next) => {
         try {
-            const {user_id, apartment_id} = req.params;
+            const {apartment_id} = req.params;
 
             const {check_in, check_out} = req.body;
 
-            const {user_id: userId, price: apartmentPrice, approve} = req.apartment;
+            const {user_id: apartmentUserId, price: apartmentPrice, approve} = req.apartment;
 
-            const {email: userEmail} = req.user;
+            const {email: userEmail, _id: user_id} = req.user;
 
             const booking_start = dayJs(check_in)
                 .valueOf();
@@ -23,7 +23,7 @@ module.exports = {
 
             const price = calculatePrice(check_in, check_out, apartmentPrice);
 
-            const {email: apartmentEmail, name: userName} = await User.findOne({_id: userId});
+            const {email: apartmentEmail, name: userName} = await User.findOne({_id: apartmentUserId});
 
             if (approve) {
                 const reservedApartment = await Booking.create({
@@ -45,7 +45,8 @@ module.exports = {
                     });
                 await emailService.sendMail(userEmail, emailActionsEnum.WAITING_FOR_CONFIRM);
 
-                res.json(reservedApartment).status(constants.CREATED);
+                res.json(reservedApartment)
+                    .status(constants.CREATED);
 
                 return;
             }
@@ -94,9 +95,9 @@ module.exports = {
 
     approveBooking: async (req, res, next) => {
         try {
-            const {booking_id:_id} = req.params;
+            const {booking_id: _id} = req.params;
 
-            const reservedApartment = await Booking.findByIdAndUpdate({_id}, {isActive:true}, {new: true});
+            const reservedApartment = await Booking.findByIdAndUpdate({_id}, {isActive: true}, {new: true});
 
             res.json(reservedApartment)
                 .status(constants.CREATED);
@@ -107,11 +108,11 @@ module.exports = {
 
     refuseBooking: async (req, res, next) => {
         try {
-            const {booking_id:_id} = req.params;
+            const {booking_id: _id} = req.params;
 
             const {user_id} = await Booking.findByIdAndDelete(_id);
 
-            const {userEmail} = await User.findOne({_id:user_id});
+            const {userEmail} = await User.findOne({_id: user_id});
 
             await emailService.sendMail(userEmail, emailActionsEnum.REFUSE_TO_RENT);
 

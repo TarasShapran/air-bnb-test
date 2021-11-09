@@ -6,7 +6,9 @@ const {s3Service} = require('../service');
 module.exports = {
     createComment: async (req, res, next) => {
         try {
-            const {user_id,apartment_id} = req.params;
+            const {apartment_id} = req.params;
+
+            const {_id:user_id} = req.user;
 
             let newComment = await Comment.create({...req.body, user_id,apartment_id});
 

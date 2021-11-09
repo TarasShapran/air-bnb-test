@@ -81,7 +81,11 @@ module.exports = {
 
     checkBookingIdAndUserIdMiddleware: async (req, res, next) => {
         try {
-            const {booking_id, user_id} = req.params;
+            const {booking_id} = req.params;
+
+            const {_id} = req.user;
+
+            const user_id = _id.toString();
 
             const bookingId = await Booking.findOne({_id: booking_id, user_id});
 
@@ -99,7 +103,11 @@ module.exports = {
 
     isUserHaveAccessAddReview: async (req, res, next) => {
         try {
-            const {user_id, apartment_id} = req.params;
+            const {apartment_id} = req.params;
+
+            const {_id} = req.user;
+
+            const user_id = _id.toString();
 
             const usersBooking = await Booking.findOne({
                 user_id,

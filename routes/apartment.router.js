@@ -21,20 +21,20 @@ router.get(
     apartmentController.getApartment);
 
 router.delete(
-    '/:user_id/:apartment_id',
+    '/:apartment_id',
     authMiddleware.checkAccessToken,
     apartmentMiddleware.checkApartmentIdAndUserIdMiddleware,
     apartmentController.deleteApartment);
 
 router.put(
-    '/:user_id/:apartment_id',
+    '/:apartment_id',
     authMiddleware.checkAccessToken,
     apartmentMiddleware.isApartmentBodyValid,
     apartmentMiddleware.checkApartmentIdAndUserIdMiddleware,
     apartmentController.updateApartment);
 
 router.put(
-    '/:user_id/:apartment_id/star',
+    '/:apartment_id/star',
     authMiddleware.checkAccessToken,
     apartmentMiddleware.isAddStarBodyValid,
     bookingMiddleware.isUserHaveAccessAddReview,
