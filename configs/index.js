@@ -6,5 +6,6 @@ module.exports = {
     emailActionsEnum: require('./email-action.enum'),
     actionTokenTypeEnum: require('./action-token-type.enum'),
     modelNamesEnum: require('./model-names.enum'),
-    apartmentTypeEnum: require('./apartment-type.enum')
+    apartmentTypeEnum: require('./apartment-type.enum'),
+    userStatusEnum: require('./user-status.enum'),
 };

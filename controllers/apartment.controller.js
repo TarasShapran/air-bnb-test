@@ -15,7 +15,7 @@ module.exports = {
             next(e);
         }
     },
-    getApartmentById:  (req, res, next) => {
+    getApartmentById: (req, res, next) => {
         try {
             const {apartment} = req;
 
@@ -24,13 +24,57 @@ module.exports = {
             next(e);
         }
     },
-    getApartment:async (req, res, next) => {
+    getApartment: async (req, res, next) => {
         try {
-            const apartment =await apartmentService.getAllApartment(req.query);
+            const apartment = await apartmentService.getAllApartment(req.query);
 
             res.json(apartment);
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    deleteApartment: async (req, res, next) => {
+        try {
+            const {apartment_id} = req.params;
+
+            await Apartment.deleteOne({_id: apartment_id});
+
+            res.sendStatus(constants.NO_CONTENT);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    updateApartment: async (req, res, next) => {
+        try {
+            const {apartment_id} = req.params;
+
+            const newApartment = await Apartment.findByIdAndUpdate(apartment_id, req.body, {new: true});
+
+            res.json(newApartment)
+                .status(constants.CREATED);
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    addStarToApartment: async (req, res, next) => {
+        try {
+            const {apartment_id: _id} = req.params;
+
+            const {star} = req.body;
+
+            const {star_rating: apartmentStar} = await Apartment.findOne({_id});
+
+            const avgStar = Math.round(((apartmentStar + star) / 2)*100)/100;
+
+            const newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: avgStar}, {new: true});
+
+            res.json(newApartment)
+                .status(constants.CREATED);
+        } catch (err) {
+            next(err);
+        }
+    },
 };

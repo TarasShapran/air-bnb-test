@@ -48,6 +48,10 @@ const apartmentSchema = new Schema({
     },
     photo: {
         type: String
+    },
+    price: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true, toObject: {virtuals: true}, toJSON: {virtuals: true}});
 

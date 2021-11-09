@@ -29,7 +29,7 @@ const createApartmentValidator = Joi.object({
         .max(30)
         .required()
         .trim(),
-    type_of_apartment: Joi
+    type: Joi
         .string()
         .allow(...Object.values(apartmentTypeEnum)),
     number_of_rooms: Joi
@@ -41,12 +41,21 @@ const createApartmentValidator = Joi.object({
     amount_of_places: Joi
         .number()
         .required(),
-    star_rating: Joi
+    price:Joi
         .number()
-        .required(),
+        .required()
 
 });
 
+const isStarPresentValidator = Joi.object({
+    star:Joi
+        .number()
+        .min(1)
+        .max(5)
+        .required()
+});
+
 module.exports = {
-    createApartmentValidator
+    createApartmentValidator,
+    isStarPresentValidator
 };
