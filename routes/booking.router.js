@@ -13,10 +13,16 @@ router.post(
     bookingController.createBooking);
 
 router.put(
-    '/:booking_id',
+    '/:booking_id/approve',
     authMiddleware.checkAccessToken,
+    bookingMiddleware.checkBookingIdMiddleware,
     bookingMiddleware.isDateFreeBookingApprove,
     bookingController.approveBooking);
+router.put(
+    '/:booking_id/refuse',
+    authMiddleware.checkAccessToken,
+    bookingMiddleware.checkBookingIdMiddleware,
+    bookingController.refuseBooking);
 
 router.put(
     '/:user_id/:booking_id',

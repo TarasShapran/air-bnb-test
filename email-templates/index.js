@@ -48,5 +48,9 @@ module.exports = {
     [emailActionsEnum.WAITING_FOR_CONFIRM]: {
         templateName: 'waiting-for-confirmation',
         subject: 'Confirm'
+    },
+    [emailActionsEnum.REFUSE_TO_RENT]: {
+        templateName: 'refuse-to-rent',
+        subject: 'Refuse'
     }
 };

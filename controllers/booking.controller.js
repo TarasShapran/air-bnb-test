@@ -105,6 +105,22 @@ module.exports = {
         }
     },
 
+    refuseBooking: async (req, res, next) => {
+        try {
+            const {booking_id:_id} = req.params;
+
+            const {user_id} = await Booking.findByIdAndDelete(_id);
+
+            const {userEmail} = await User.findOne({_id:user_id});
+
+            await emailService.sendMail(userEmail, emailActionsEnum.REFUSE_TO_RENT);
+
+            res.sendStatus(constants.NO_CONTENT);
+        } catch (e) {
+            next(e);
+        }
+    },
+
     getAllBooking: async (req, res, next) => {
         try {
             const {_id: apartment_id} = req.apartment;

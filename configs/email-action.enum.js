@@ -10,5 +10,6 @@ module.exports = {
     APARTMENT_RESERVED: 'apartmentReserved',
     APPROVE_TO_RESERVE: 'approveToReserveApartment',
     WAITING_FOR_CONFIRM: 'waitingForConfirm',
+    REFUSE_TO_RENT: 'refuseToRent',
     RESERVED: 'Reserved'
 };
