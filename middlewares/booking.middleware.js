@@ -74,7 +74,7 @@ module.exports = {
         }
     },
 
-    isUserHaveAccessAddComment: async (req, res, next) => {
+    isUserHaveAccessAddReview: async (req, res, next) => {
         try {
             const {user_id, apartment_id} = req.params;
 

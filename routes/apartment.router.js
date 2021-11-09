@@ -1,7 +1,7 @@
 const router = require('express')
     .Router();
 
-const {apartmentMiddleware,userMiddleware, authMiddleware} = require('../middlewares');
+const {apartmentMiddleware,userMiddleware, authMiddleware, bookingMiddleware} = require('../middlewares');
 const {apartmentController} = require('../controllers');
 
 router.post(
@@ -21,16 +21,23 @@ router.get(
     apartmentController.getApartment);
 
 router.delete(
-    '/:apartment_id',
-    apartmentMiddleware.checkApartmentIdMiddleware,
+    '/:user_id/:apartment_id',
     authMiddleware.checkAccessToken,
+    apartmentMiddleware.checkApartmentIdAndUserIdMiddleware,
     apartmentController.deleteApartment);
 
 router.put(
-    '/:apartment_id',
+    '/:user_id/:apartment_id',
     authMiddleware.checkAccessToken,
-    apartmentMiddleware.checkApartmentIdMiddleware,
     apartmentMiddleware.isApartmentBodyValid,
+    apartmentMiddleware.checkApartmentIdAndUserIdMiddleware,
     apartmentController.updateApartment);
+
+router.put(
+    '/:user_id/:apartment_id/star',
+    authMiddleware.checkAccessToken,
+    apartmentMiddleware.isAddStarBodyValid,
+    bookingMiddleware.isUserHaveAccessAddReview,
+    apartmentController.addStarToApartment);
 
 module.exports = router;

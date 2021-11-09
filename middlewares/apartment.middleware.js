@@ -20,6 +20,22 @@ module.exports = {
         }
     },
 
+    isAddStarBodyValid: (req, res, next) => {
+        try {
+            const {error, value} = apartmentValidator.isStarPresentValidator.validate(req.body);
+
+            if (error) {
+                throw new ErrorHandler(error.details[0].message, constants.BAD_REQUEST);
+            }
+
+            req.body = value;
+
+            next();
+        } catch (err) {
+            next(err);
+        }
+    },
+
     checkApartmentIdMiddleware: async (req, res, next) => {
         try {
             const {apartment_id: _id} = req.params;
@@ -36,5 +52,23 @@ module.exports = {
         } catch (err) {
             next(err);
         }
-    }
+    },
+
+    checkApartmentIdAndUserIdMiddleware: async (req, res, next) => {
+        try {
+            const {apartment_id, user_id} = req.params;
+
+            const apartmentId = await Apartment.findOne({_id: apartment_id, user_id});
+
+            if (!apartmentId) {
+                throw new ErrorHandler(constants.BOOKING_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
+            }
+
+            req.booking = apartmentId;
+
+            next();
+        } catch (err) {
+            next(err);
+        }
+    },
 };

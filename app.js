@@ -41,7 +41,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
 app.use('/apartments', apartmentRouter);
 app.use('/auth', authRouter);
-app.use('/comment', commentRouter);
+app.use('/comments', commentRouter);
 app.use('/booking', bookingRouter);
 app.use('/users', userRouter);
 
