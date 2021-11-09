@@ -12,10 +12,17 @@ module.exports = {
 
             let newComment = await Comment.create({...req.body, user_id,apartment_id});
 
-            if (req.files && req.files.photo) {
-                const uploadInfo = await s3Service.uploadImage(req.files.photo, 'photos', newComment._id.toString());
+            const {photos} = req.files;
 
-                newComment = await Comment.findByIdAndUpdate(newComment._id, { photo: uploadInfo.Location }, { new: true });
+            if (req.files && photos) {
+                const uploadInfo=[];
+                for (const value of photos) {
+                    const upload = await s3Service.uploadImage(value, 'photos', newComment._id.toString());
+
+                    uploadInfo.push(upload.Location);
+                }
+
+                newComment = await Comment.findByIdAndUpdate(newComment._id, { photo: uploadInfo }, { new: true });
             }
 
             res.json(newComment)
