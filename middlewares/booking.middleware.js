@@ -56,14 +56,14 @@ module.exports = {
         }
     },
 
-    checkBookingIdMiddleware: async (req, res, next) => {
+    checkBookingIdAndUserIdMiddleware: async (req, res, next) => {
         try {
-            const {booking_id} = req.params;
+            const {booking_id, user_id} = req.params;
 
-            const bookingId = await Booking.findById(booking_id);
+            const bookingId = await Booking.findOne({_id: booking_id, user_id});
 
             if (!bookingId) {
-                throw new ErrorHandler(constants.USER_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
+                throw new ErrorHandler(constants.BOOKING_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
             }
 
             req.booking = bookingId;
@@ -74,22 +74,41 @@ module.exports = {
         }
     },
 
-    isUserHaveAccess: async (req, res, next) => {
+    isUserHaveAccessAddComment: async (req, res, next) => {
         try {
             const {user_id, apartment_id} = req.params;
 
             const usersBooking = await Booking.findOne({
                 user_id,
                 apartment_id,
-                booking_end: {$lt: Date.now()}});
+                booking_end: {$lt: Date.now()}
+            });
 
-            if (!usersBooking){
-                throw new ErrorHandler(constants.ACCESS_DENIED,constants.FORBIDDEN);
+            if (!usersBooking) {
+                throw new ErrorHandler(constants.ACCESS_DENIED, constants.FORBIDDEN);
             }
 
             next();
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    checkBookingIdMiddleware: async (req, res, next) => {
+        try {
+            const {booking_id} = req.params;
+
+            const bookingId = await Booking.findOne({_id: booking_id});
+
+            if (!bookingId) {
+                throw new ErrorHandler(constants.BOOKING_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
+            }
+
+            req.booking = bookingId;
+
+            next();
+        } catch (err) {
+            next(err);
+        }
+    },
 };
