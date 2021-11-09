@@ -61,15 +61,28 @@ module.exports = {
 
     addStarToApartment: async (req, res, next) => {
         try {
-            const {apartment_id: _id} = req.params;
+            const {apartment_id} = req.params;
+
+            const _id = apartment_id.toString();
 
             const {star} = req.body;
 
-            const {star_rating: apartmentStar} = await Apartment.findOne({_id});
+            const apartment = await Apartment.findOne({_id});
 
-            const avgStar = Math.round(((apartmentStar + star) / 2)*100)/100;
+            let newApartment;
 
-            const newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: avgStar}, {new: true});
+            if (!apartment.star_rating) {
+                newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: star}, {new: true});
+
+                res.json(newApartment)
+                    .status(constants.CREATED);
+
+                return;
+            }
+
+            const avgStar = Math.round(((apartment.star_rating + star) / 2) * 100) / 100;
+
+            newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: avgStar}, {new: true});
 
             res.json(newApartment)
                 .status(constants.CREATED);
