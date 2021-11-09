@@ -43,6 +43,7 @@ module.exports = {
                         check_out,
                         viewProfile: `${config.LOCALHOST_5000}users/${user_id}`
                     });
+                await emailService.sendMail(userEmail, emailActionsEnum.WAITING_FOR_CONFIRM);
 
                 res.json(reservedApartment).status(constants.CREATED);
 

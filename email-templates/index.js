@@ -44,5 +44,9 @@ module.exports = {
     [emailActionsEnum.APPROVE_TO_RESERVE]: {
         templateName: 'approve-to-reserve',
         subject: 'Approve'
+    },
+    [emailActionsEnum.WAITING_FOR_CONFIRM]: {
+        templateName: 'waiting-for-confirmation',
+        subject: 'Confirm'
     }
 };

@@ -9,5 +9,6 @@ module.exports = {
     COME_BACK: 'comeBack',
     APARTMENT_RESERVED: 'apartmentReserved',
     APPROVE_TO_RESERVE: 'approveToReserveApartment',
+    WAITING_FOR_CONFIRM: 'waitingForConfirm',
     RESERVED: 'Reserved'
 };
