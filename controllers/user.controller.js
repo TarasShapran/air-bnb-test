@@ -94,11 +94,11 @@ module.exports = {
     addAvatar: async (req, res, next) => {
         try {
             const {avatar} = req.files;
-            const {_id} = req.body;
+            const {_id} = req.user;
             let user ={};
 
             if (avatar && req.files) {
-                const uploadInfo = await s3Service.uploadImage(avatar, 'user', _id);
+                const uploadInfo = await s3Service.uploadImage(avatar, 'user', _id.toString());
 
                 user = await User.findByIdAndUpdate(_id, {avatar: uploadInfo.Location}, {new: true});
             }

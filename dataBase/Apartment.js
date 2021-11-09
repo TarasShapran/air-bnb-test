@@ -35,11 +35,16 @@ const apartmentSchema = new Schema({
         required: true
     },
     star_rating: {
-        type: Number
+        type: Number,
+        default:null
     },
     description: {
         type: String,
         required: true
+    },
+    approve: {
+        type: Boolean,
+        default: false
     },
     user_id: {
         type: Schema.Types.ObjectId,

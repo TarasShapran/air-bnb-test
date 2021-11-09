@@ -29,11 +29,34 @@ module.exports = {
 
             const {check_in, check_out} = req.body;
 
-            const reservedApartments = await Booking.find({apartment_id});
+            const reservedApartments = await Booking.find({apartment_id, isActive: true});
 
             if (reservedApartments) {
                 bookingUtil.isDateNotReserved(reservedApartments, check_in, check_out);
             }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    isDateFreeBookingApprove: async (req, res, next) => {
+        try {
+            const {booking_id: _id} = req.params;
+
+            const {check_in, check_out, apartment_id, isActive} = await Booking.findOne({_id});
+
+            if (isActive) {
+                throw new ErrorHandler('You can not activate already active booking', constants.FORBIDDEN);
+            }
+
+            const reservedApartments = await Booking.find({apartment_id, isActive: true});
+
+            if (reservedApartments) {
+                bookingUtil.isDateNotReserved(reservedApartments, check_in, check_out);
+            }
+
             next();
         } catch (e) {
             next(e);
@@ -58,7 +81,11 @@ module.exports = {
 
     checkBookingIdAndUserIdMiddleware: async (req, res, next) => {
         try {
-            const {booking_id, user_id} = req.params;
+            const {booking_id} = req.params;
+
+            const {_id} = req.user;
+
+            const user_id = _id.toString();
 
             const bookingId = await Booking.findOne({_id: booking_id, user_id});
 
@@ -76,7 +103,11 @@ module.exports = {
 
     isUserHaveAccessAddReview: async (req, res, next) => {
         try {
-            const {user_id, apartment_id} = req.params;
+            const {apartment_id} = req.params;
+
+            const {_id} = req.user;
+
+            const user_id = _id.toString();
 
             const usersBooking = await Booking.findOne({
                 user_id,

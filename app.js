@@ -41,8 +41,8 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
 app.use('/apartments', apartmentRouter);
 app.use('/auth', authRouter);
-app.use('/comments', commentRouter);
 app.use('/booking', bookingRouter);
+app.use('/comments', commentRouter);
 app.use('/users', userRouter);
 
 // eslint-disable-next-line no-unused-vars

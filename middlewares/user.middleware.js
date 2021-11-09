@@ -81,7 +81,7 @@ module.exports = {
                 throw new ErrorHandler(constants.WRONG_EMAIL_OR_PASSWORD, constants.BAD_REQUEST);
             }
 
-            if (userByEmail!==userStatusEnum.ACTIVE){
+            if (+userByEmail.status!==userStatusEnum.ACTIVE){
                 throw new ErrorHandler(constants.ACCOUNT_IS_BLOCKED, constants.FORBIDDEN);
             }
 

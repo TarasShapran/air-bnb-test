@@ -56,12 +56,15 @@ module.exports = {
 
     checkApartmentIdAndUserIdMiddleware: async (req, res, next) => {
         try {
-            const {apartment_id, user_id} = req.params;
+            const {apartment_id} = req.params;
+            const {_id} = req.user;
+
+            const user_id = _id.toString();
 
             const apartmentId = await Apartment.findOne({_id: apartment_id, user_id});
 
             if (!apartmentId) {
-                throw new ErrorHandler(constants.BOOKING_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
+                throw new ErrorHandler(constants.APARTMENT_ID_DOES_NOT_EXIST, constants.BAD_REQUEST);
             }
 
             req.booking = apartmentId;

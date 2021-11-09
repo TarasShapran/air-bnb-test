@@ -1,19 +1,30 @@
 const {bookingController} = require('../controllers');
-const {bookingMiddleware, authMiddleware, apartmentMiddleware, userMiddleware} = require('../middlewares');
+const {bookingMiddleware, authMiddleware, apartmentMiddleware} = require('../middlewares');
 const router = require('express')
     .Router();
 
 router.post(
-    '/:user_id/:apartment_id',
+    '/:apartment_id',
     authMiddleware.checkAccessToken,
     bookingMiddleware.isBookingBodyValid,
-    userMiddleware.checkUserIdMiddleware,
     apartmentMiddleware.checkApartmentIdMiddleware,
     bookingMiddleware.isBookingDateFree(),
     bookingController.createBooking);
 
 router.put(
-    '/:user_id/:booking_id',
+    '/:booking_id/approve',
+    authMiddleware.checkAccessToken,
+    bookingMiddleware.checkBookingIdMiddleware,
+    bookingMiddleware.isDateFreeBookingApprove,
+    bookingController.approveBooking);
+router.put(
+    '/:booking_id/refuse',
+    authMiddleware.checkAccessToken,
+    bookingMiddleware.checkBookingIdMiddleware,
+    bookingController.refuseBooking);
+
+router.put(
+    '/:booking_id',
     authMiddleware.checkAccessToken,
     bookingMiddleware.isBookingBodyValid,
     bookingMiddleware.checkBookingIdAndUserIdMiddleware,
@@ -31,7 +42,7 @@ router.get(
     bookingController.getBookingById);
 
 router.delete(
-    '/:user_id/:booking_id',
+    '/:booking_id',
     authMiddleware.checkAccessToken,
     bookingMiddleware.checkBookingIdAndUserIdMiddleware,
     bookingController.deleteBooking);

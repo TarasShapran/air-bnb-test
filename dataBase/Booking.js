@@ -23,6 +23,10 @@ const bookingSchema = new Schema({
     },
     price: {
         type: Number
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 }, {timestamps: true});
 
