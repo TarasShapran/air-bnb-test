@@ -19,6 +19,13 @@ router.post(
     fileMiddleware.checkCommentPhoto,
     commentController.createComment);
 
+router.put(
+    '/:comment_id',
+    authMiddleware.checkAccessToken,
+    commentMiddleware.isCommentBodyValid,
+    fileMiddleware.checkCommentPhoto,
+    commentController.updateComment);
+
 router.get('/',
     commentController.getAllComments);
 

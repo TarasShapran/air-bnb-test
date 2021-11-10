@@ -33,6 +33,33 @@ module.exports = {
         }
     },
 
+    updateComment: async (req, res, next) => {
+        try {
+            const {comment_id} = req.params;
+
+            let newComment = await Comment.findByIdAndUpdate(comment_id,req.body,{new: true});
+
+            if (req.files && req.files.photos) {
+                const {photos} = req.files;
+
+                const uploadInfo=newComment.photo;
+
+                for (const value of photos) {
+                    const upload = await s3Service.uploadImage(value, 'photos', newComment._id.toString());
+
+                    uploadInfo.push(upload.Location);
+                }
+
+                newComment = await Comment.findByIdAndUpdate(newComment._id, { photo: uploadInfo }, { new: true });
+            }
+
+            res.json(newComment)
+                .status(constants.CREATED);
+        } catch (e) {
+            next(e);
+        }
+    },
+
     getAllComments:async (req, res, next)=>{
         try {
             const comments = await Comment.find();
