@@ -145,17 +145,33 @@ module.exports = {
         }
     },
 
-    checkActivateToken: async (req, res, next) => {
+    checkActivateToken: (tokenArr = {}) => async (req, res, next) => {
         try {
             const {token} = req.params;
 
-            await jwtService.verifyToken(token, actionTokenTypeEnum.ACTIVATE);
+            console.log(tokenArr);
 
-            const {user_id: user, _id} = await ActionToken.findOne({token, token_type: actionTokenTypeEnum.ACTIVATE});
+            switch (tokenArr) {
+                case actionTokenTypeEnum.ACTIVATE:
+                    await jwtService.verifyToken(token, actionTokenTypeEnum.ACTIVATE);
+
+                    break;
+                case actionTokenTypeEnum.APPROVE:
+                    console.log('hello');
+                    await jwtService.verifyToken(token, actionTokenTypeEnum.APPROVE);
+                    break;
+                default:
+                    throw new ErrorHandler(constants.INVALID_TOKEN, constants.INVALID_TOKEN);
+            }
+            // await jwtService.verifyToken(token, actionTokenTypeEnum.ACTIVATE);
+            console.log(token);
+            console.log(tokenArr);
+            const {user_id: user, _id} = await ActionToken.findOne({token, token_type: tokenArr});
 
             if (!user) {
                 throw new ErrorHandler(constants.INVALID_TOKEN, constants.UNAUTHORIZED);
             }
+
 
             await ActionToken.deleteOne({_id});
 

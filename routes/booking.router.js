@@ -1,5 +1,6 @@
 const {bookingController} = require('../controllers');
 const {bookingMiddleware, authMiddleware, apartmentMiddleware} = require('../middlewares');
+const {actionTokenTypeEnum} = require('../configs');
 const router = require('express')
     .Router();
 
@@ -11,9 +12,9 @@ router.post(
     bookingMiddleware.isBookingDateFree(),
     bookingController.createBooking);
 
-router.put(
-    '/:booking_id/approve',
-    authMiddleware.checkAccessToken,
+router.get(
+    '/:booking_id/approve/:token',
+    authMiddleware.checkActivateToken(actionTokenTypeEnum.APPROVE),
     bookingMiddleware.checkBookingIdMiddleware,
     bookingMiddleware.isDateFreeBookingApprove,
     bookingController.approveBooking);

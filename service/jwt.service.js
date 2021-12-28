@@ -32,6 +32,9 @@ module.exports = {
                 case actionTokenTypeEnum.ACTIVATE:
                     secretWord = config.JWT_ACTION_SECRET;
                     break;
+                case actionTokenTypeEnum.APPROVE:
+                    secretWord = config.JWT_ACTION_SECRET;
+                    break;
                 default:
                     throw new ErrorHandler(constants.WRONG_TOKEN_TYPE, constants.INTERNAL_SERVER_ERROR);
             }
@@ -51,6 +54,9 @@ module.exports = {
                 secretWord = config.JWT_ACTION_SECRET;
                 break;
             case actionTokenTypeEnum.ACTIVATE:
+                secretWord = config.JWT_ACTION_SECRET;
+                break;
+            case actionTokenTypeEnum.APPROVE:
                 secretWord = config.JWT_ACTION_SECRET;
                 break;
             default:

@@ -55,7 +55,7 @@ router.put(
 
 router.get(
     '/activate/:token',
-    authMiddleware.checkActivateToken,
+    authMiddleware.checkActivateToken(actionTokenTypeEnum.ACTIVATE),
     authController.activate);
 
 module.exports = router;

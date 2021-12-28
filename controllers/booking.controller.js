@@ -1,8 +1,8 @@
 const dayJs = require('dayjs');
 
-const {constants, emailActionsEnum, config} = require('../configs');
-const {Booking, Apartment, User} = require('../dataBase');
-const {emailService} = require('../service');
+const {constants, emailActionsEnum, config, actionTokenTypeEnum} = require('../configs');
+const {Booking, Apartment, User, ActionToken} = require('../dataBase');
+const {emailService, jwtService} = require('../service');
 const {calculatePrice} = require('../util/booking.util');
 
 module.exports = {
@@ -26,6 +26,10 @@ module.exports = {
             const {email: apartmentEmail, name: userName} = await User.findOne({_id: apartmentUserId});
 
             if (approve) {
+                const token = jwtService.generateActionToken(actionTokenTypeEnum.APPROVE);
+
+                await ActionToken.create({token, token_type: actionTokenTypeEnum.APPROVE, user_id: apartmentUserId});
+
                 const reservedApartment = await Booking.create({
                     user_id,
                     apartment_id,
@@ -41,8 +45,10 @@ module.exports = {
                         userName,
                         check_in,
                         check_out,
-                        viewProfile: `${config.LOCALHOST_5000}users/${user_id}`
+                        viewProfile: `${config.LOCALHOST_5000}users/${user_id}`,
+                        approveBooking: `${config.LOCALHOST_5000}booking/${reservedApartment._id}/approve/${token}`
                     });
+
                 await emailService.sendMail(userEmail, emailActionsEnum.WAITING_FOR_CONFIRM);
 
                 res.json(reservedApartment)
