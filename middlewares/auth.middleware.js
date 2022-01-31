@@ -95,7 +95,7 @@ module.exports = {
 
     checkRefreshToken: async (req, res, next) => {
         try {
-            const token = req.get(constants.AUTHORIZATION);
+            const {token} = req.body;
 
             if (!token) {
                 throw new ErrorHandler(constants.INVALID_TOKEN, constants.UNAUTHORIZED);

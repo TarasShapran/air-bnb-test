@@ -17,6 +17,17 @@ module.exports = {
             next(err);
         }
     },
+    getMe:  (req, res, next) => {
+        try {
+            const user = req.user;
+
+            const normalizedUser = userUtil.userNormalizator(user.toObject());
+
+            res.json(normalizedUser);
+        } catch (err) {
+            next(err);
+        }
+    },
 
     getUserById: (req, res, next) => {
         try {

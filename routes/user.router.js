@@ -8,8 +8,12 @@ const {userRoles: {ADMIN,MANAGER}} = require('../configs');
 router.get(
     '/',
     authMiddleware.checkAccessToken,
-    userMiddleware.checkUserRole([ADMIN]),
+    //userMiddleware.checkUserRole([ADMIN]),
     userController.getUsers);
+router.get(
+    '/me',
+    authMiddleware.checkAccessToken,
+    userController.getMe);
 
 router.post(
     '/',

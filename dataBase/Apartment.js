@@ -51,9 +51,7 @@ const apartmentSchema = new Schema({
         required: true,
         ref: 'user'
     },
-    photo: {
-        type: String
-    },
+    photo: [String],
     price: {
         type: Number,
         required: true

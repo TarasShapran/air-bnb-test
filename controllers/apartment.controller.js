@@ -1,13 +1,27 @@
 const {Apartment} = require('../dataBase');
 const {constants} = require('../configs');
-const {apartmentService} = require('../service');
+const {apartmentService, s3Service} = require('../service');
 
 module.exports = {
     createApartment: async (req, res, next) => {
         try {
             const {_id:user_id} = req.user;
 
-            const apartment = await Apartment.create({...req.body, user_id});
+            let apartment = await Apartment.create({...req.body, user_id});
+
+            if (req.files && req.files.photos) {
+                const {photos} = req.files;
+
+                const uploadInfo=[];
+
+                for (const value of photos) {
+                    const upload = await s3Service.uploadImage(value, 'photos', apartment._id.toString());
+
+                    uploadInfo.push(upload.Location);
+                }
+
+                apartment = await Apartment.findByIdAndUpdate(apartment._id, { photo: uploadInfo }, { new: true });
+            }
 
             res.json(apartment)
                 .status(constants.CREATED);
