@@ -14,8 +14,17 @@ module.exports = {
     },
 
     verifyToken: (token, tokenType = tokenTypeEnum.ACCESS) => {
+        if (tokenType === tokenTypeEnum.REFRESH) {
+            try {
+                jwt.verify(token, config.JWT_REFRESH_SECRET);
+            } catch (e) {
+                throw new ErrorHandler(constants.INVALID_TOKEN, constants.FORBIDDEN);
+            }
+
+        }
         try {
             let secretWord;
+
             switch (tokenType) {
                 case actionTokenTypeEnum.FORGOT_PASSWORD:
                     secretWord = config.JWT_ACTION_SECRET;
