@@ -5,14 +5,14 @@ const {apartmentService, s3Service} = require('../service');
 module.exports = {
     createApartment: async (req, res, next) => {
         try {
-            const {_id:user_id} = req.user;
+            const {_id: user_id} = req.user;
 
             let apartment = await Apartment.create({...req.body, user_id});
 
             if (req.files && req.files.photos) {
                 const {photos} = req.files;
 
-                const uploadInfo=[];
+                const uploadInfo = [];
 
                 for (const value of photos) {
                     const upload = await s3Service.uploadImage(value, 'photos', apartment._id.toString());
@@ -20,7 +20,7 @@ module.exports = {
                     uploadInfo.push(upload.Location);
                 }
 
-                apartment = await Apartment.findByIdAndUpdate(apartment._id, { photo: uploadInfo }, { new: true });
+                apartment = await Apartment.findByIdAndUpdate(apartment._id, {photo: uploadInfo}, {new: true});
             }
 
             res.json(apartment)
@@ -86,7 +86,7 @@ module.exports = {
             let newApartment;
 
             if (!apartment.star_rating) {
-                newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: star}, {new: true});
+                newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: star, number_of_star: 1}, {new: true});
 
                 res.json(newApartment)
                     .status(constants.CREATED);
@@ -96,7 +96,13 @@ module.exports = {
 
             const avgStar = Math.round(((apartment.star_rating + star) / 2) * 100) / 100;
 
-            newApartment = await Apartment.findByIdAndUpdate(_id, {star_rating: avgStar}, {new: true});
+            let {number_of_star} = apartment;
+            number_of_star += 1;
+
+            newApartment = await Apartment.findByIdAndUpdate(_id, {
+                star_rating: avgStar,
+                number_of_star
+            }, {new: true});
 
             res.json(newApartment)
                 .status(constants.CREATED);

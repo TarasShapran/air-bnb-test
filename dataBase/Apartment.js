@@ -8,6 +8,11 @@ const apartmentSchema = new Schema({
         required: true,
         trim: true
     },
+    title:{
+        type: String,
+        required: true,
+        trim: true
+    },
     city: {
         type: String,
         required: true,
@@ -29,6 +34,9 @@ const apartmentSchema = new Schema({
     number_of_beds: {
         type: Number,
         required: true
+    },
+    number_of_star: {
+        type: Number
     },
     amount_of_places: {
         type: Number,
