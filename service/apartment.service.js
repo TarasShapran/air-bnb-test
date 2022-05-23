@@ -3,8 +3,8 @@ const {Apartment} = require('../dataBase');
 module.exports = {
     getAllApartment: (query = {}) => {
         const {
-            perPage = 20,
-            page = 1,
+            page = null,
+            perPage = null,
             sortBy = 'createdAt',
             order = 'asc',
             ...filters
@@ -37,11 +37,11 @@ module.exports = {
                     case 'amountOfPlaces.lte':
                         Object.assign(amountOfPlacesFilter, {$lte: +filters['amountOfPlaces.lte']});
                         break;
-                    case 'price.gte':
-                        Object.assign(priceFilter, {$gte: +filters['price.gte']});
+                    case 'priceGte':
+                        Object.assign(priceFilter, {$gte: +filters['priceGte']});
                         break;
-                    case 'price.lte':
-                        Object.assign(priceFilter, {$lte: +filters['price.lte']});
+                    case 'priceLte':
+                        Object.assign(priceFilter, {$lte: +filters['priceLte']});
                         break;
                 }
             });
@@ -54,10 +54,16 @@ module.exports = {
 
         const orderBy = order === 'asc' ? 1 : -1;
 
+        if(page && perPage) {
+            return Apartment
+                .find(findObject)
+                .sort({[sortBy]: orderBy})
+                .limit(+perPage)
+                .skip((page) * perPage);
+        }
+
         return Apartment
             .find(findObject)
-            .sort({[sortBy]: orderBy})
-            .limit(+perPage)
-            .skip((page - 1) * perPage);
+            .sort({[sortBy]: orderBy});
     }
 };
