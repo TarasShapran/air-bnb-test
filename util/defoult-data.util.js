@@ -9,6 +9,7 @@ module.exports = async () => {
             name: 'User',
             email: 'user.admin@site.com',
             password: 'User2021!',
+            is_active: true,
             role: userRoles.ADMIN
         });
     }
