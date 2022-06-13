@@ -37,7 +37,7 @@ router.delete(
 
 router.get(
     '/:user_id',
-    authMiddleware.checkAccessToken,
+    // authMiddleware.checkAccessToken,
     userMiddleware.checkUserIdMiddleware,
     userController.getUserById);
 

@@ -1,8 +1,13 @@
 const router = require('express')
     .Router();
 
-const {apartmentMiddleware, authMiddleware, bookingMiddleware} = require('../middlewares');
+const {apartmentMiddleware, authMiddleware, bookingMiddleware, userMiddleware} = require('../middlewares');
 const {apartmentController} = require('../controllers');
+
+router.get(
+    '/me',
+    authMiddleware.checkAccessToken,
+    apartmentController.getMyApartment);
 
 router.post(
     '/',
@@ -14,6 +19,11 @@ router.get(
     '/:apartment_id',
     apartmentMiddleware.checkApartmentIdMiddleware,
     apartmentController.getApartmentById);
+
+router.get(
+    '/:user_id/my',
+    userMiddleware.checkUserIdMiddleware,
+    apartmentController.getApartmentByUserId);
 
 router.get(
     '/',

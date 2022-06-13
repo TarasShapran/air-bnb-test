@@ -38,6 +38,23 @@ module.exports = {
             next(e);
         }
     },
+    getApartmentByUserId: async (req, res, next) => {
+        try {
+            const app = await Apartment.find(req.params);
+            res.json(app);
+        } catch (e) {
+            next(e);
+        }
+    },
+    getMyApartment: async (req, res, next) => {
+        try {
+            const {id} = req.user;
+            const app = await Apartment.find({user_id: id});
+            res.json(app);
+        } catch (e) {
+            next(e);
+        }
+    },
     getApartment: async (req, res, next) => {
         try {
             const apartment = await apartmentService.getAllApartment(req.query);
